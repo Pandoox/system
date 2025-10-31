@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Identidade</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111827;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #1F2937;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #00ffcc;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #374151;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00e6b8;
+    }
+
+    .upload-section {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .upload-box {
+      flex: 1;
+      text-align: center;
+    }
+
+    .upload-box label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .upload-box input {
+      background-color: #111827;
+      border: none;
+      color: #fff;
+    }
+    input[type="text"],
+select,
+textarea {
+  text-transform: uppercase;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Formulário de Identidade</h1>
+    <form action="/gerar_rg" method="POST" enctype="multipart/form-data">
+
+      <label>Nome:</label>
+      <input type="text" name="nome" required>
+
+      <label>Registro Geral - CPF:</label>
+      <input type="text" name="cpf" required>
+
+      <label>Data de Nascimento:</label>
+      <input type="date" name="data_nascimento" required>
+
+      <label>Estado</label>
+      <input type="text" name="naturalidade" required>
+
+      <label>Sigla Do Seu Estado:</label>
+      <input type="text" name="local" required style="text-transform: uppercase;">
+
+
+      <label>Sexo:</label>
+      <select name="sexo" required>
+        <option value="">Selecione</option>
+        <option value="M">Masculino</option>
+        <option value="F">Feminino</option>
+      </select>
+
+      <label>Nacionalidade:</label>
+      <select name="nacionalidade" required>
+        <option value="BRASIL (BRA)">BRASIL (BRA)</option>
+      </select>
+
+      <label>Data de Validade:</label>
+      <input type="date" name="data_validade" required>
+
+      <label>Nome do Pai:</label>
+      <input type="text" name="nome_pai">
+
+      <label>Nome da Mãe:</label>
+      <input type="text" name="nome_mae" required>
+      
+      <label>Órgão Expedidor:</label>
+      <input type="text" name="orgao_expedidor" required>
+
+
+      <label>Data de Emissão:</label>
+      <input type="date" name="data_emissao" required>
+
+<label>Estado Civil:</label>
+<select name="estado_civil" required>
+  <option value="">Selecione</option>
+  <option value="SOLTEIRO(A)">SOLTEIRO(A)</option>
+  <option value="CASADO(A)">CASADO(A)</option>
+  <option value="DIVORCIADO(A)">DIVORCIADO(A)</option>
+  <option value="SEPARADO(A)">SEPARADO(A)</option>
+  <option value="VIÚVO(A)">VIÚVO(A)</option>
+  <option value="UNIÃO ESTÁVEL">UNIÃO ESTÁVEL</option>
+</select>
+
+
+
+
+      
+
+      <label>Tipo Sanguíneo:</label>
+      <select name="tipo_sanguineo" required>
+        <option value="">Selecione</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+      </select>
+
+      <label>Doador de Órgãos:</label>
+      <select name="doador" required>
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+
+      <label>Certidão de Nascimento / Casamento / Averb. Divórcio:</label>
+      <input type="text" name="certidao" id="certidao" required readonly>
+      <button type="button" onclick="gerarCertidao()">Gerar</button>
+
+      <div class="upload-section">
+        <div class="upload-box">
+          <label>Assinatura:</label>
+          <input type="file" name="assinatura" accept="image/*" required>
+        </div>
+        <div class="upload-box">
+          <label>Foto 3x4:</label>
+          <input type="file" name="foto_3x4" accept="image/*" required>
+        </div>
+      </div>
+
+      <button type="submit">Gerar Documento</button>
+    </form>
+  </div>
+
+
+  <script>
+function gerarCertidao() {
+  function rand(n) {
+    return Math.floor(Math.random() * Math.pow(10, n)).toString().padStart(n, '0');
+  }
+
+  const parte1 = rand(6);   // 892436
+  const parte2 = rand(2);   // 96
+  const parte3 = rand(2);   // 74
+  const parte4 = new Date().getFullYear(); // 2025
+  const parte5 = rand(1);   // 1
+  const parte6 = rand(5);   // 81717
+  const parte7 = rand(3);   // 456
+  const parte8 = rand(6);   // 943069
+  const parte9 = rand(2);   // 20
+
+  const certidao = `${parte1} ${parte2} ${parte3} ${parte4} ${parte5} ${parte6} ${parte7} ${parte8}-${parte9}`;
+  document.getElementById("certidao").value = certidao;
+}
+</script>
+</body>
+</html>

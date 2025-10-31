@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>RG Digital — GovBR</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #000;
+    }
+
+    header {
+      background-color: #6BAA3D;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+h1 {
+  font-size: 2rem; /* 🔹 Aumente esse valor — 2rem = tamanho grande e responsivo */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0px;
+  color: #444444; /* ou qualquer cor que queira */
+}
+
+.govbr {
+  font-size: 1.1rem; /* 🔹 Aumente esse também — ex: 1.8rem */
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: -5px;
+  color: #444444;
+}
+
+    .fingerprint {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .fingerprint img {
+      width: 100px;
+      height: 100px;
+      opacity: 0.6;
+    }
+
+    .info {
+      padding: 0 20px 30px;
+      font-size: 14px;
+    }
+
+    .campo {
+      margin-bottom: 12px;
+    }
+
+    .campo span {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 2px;
+    }
+.fingerprint {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.fp-box {
+  position: relative;
+  background: #fff;
+  border: 4px solid #d9d9d9; /* moldura cinza clara */
+  padding: 8px;
+  display: flex;
+  width: 130px;   /* largura mais estreita */
+  height: 160px;  /* altura maior */
+  box-sizing: content-box;
+}
+
+.fp-box img {
+  width: 200px;
+  height: 140px;
+  margin-left: -15px;  /* move para a direita (eixo X) */
+  margin-top: 10px;   /* move para baixo (eixo Y) */
+  object-fit: contain;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+.fp-bar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px; /* faixa preta */
+  background: #000;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #6BAA3D;
+  color: white;
+  padding: 12px 20px;
+  font-size: 25px;
+  
+}
+
+.top-left {
+  display: flex;
+  align-items: center;
+}
+
+.top-left .seta {
+  font-size: 25px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.info-icon {
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:  #6BAA3D;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.info {
+  background: #f2f2f2; /* fundo levemente cinza */
+  border: 1px solid #ddd;
+  padding: 10px 40px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333333; /* verde-escuro */
+  line-height: 1.8;
+}
+
+.campo {
+  border-bottom: 1px solid #dcdcdc;
+  padding: 6px 0;
+  font-size: 20px;
+}
+
+.campo span {
+  display: block;
+  font-weight: 500;
+  color: #6BAA3D;
+  font-size: 14px; /* mantém o tamanho do rótulo */
+}
+
+.campo:last-child {
+  border-bottom: none;
+}
+
+/* 🌐 Responsividade */
+@media (max-width: 768px) {
+
+    .fp-box {
+    width: 100px !important;
+    height: 130px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 4px !important;
+  }
+
+  .fp-box img {
+    width: 90px !important;
+    height: auto !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+  }
+
+
+  .top-bar {
+    font-size: 18px;
+    padding: 10px 14px;
+  }
+
+  .info {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .campo {
+    font-size: 15px;
+  }
+
+  .fp-box {
+    width: 100px;
+    height: 140px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
+
+/* 🌐 Responsividade */
+@media (max-width: 768px) {
+  .top-bar {
+    font-size: 20px !important;
+    padding: 12px 16px !important;
+  }
+
+  .info {
+    padding: 12px 18px !important;
+    font-size: 16px !important;
+  }
+
+  .campo {
+    font-size: 18px !important;
+  }
+
+  .campo span {
+    font-size: 15px !important;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  .govbr {
+    font-size: 18px !important;
+  }
+
+  .fp-box {
+    width: 100px !important;
+    height: 140px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    font-size: 18px !important;
+    padding: 10px 14px !important;
+  }
+
+  .seta {
+    font-size: 22px !important;
+  }
+
+  .info-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 16px !important;
+  }
+
+  .info {
+    padding: 12px !important;
+    font-size: 16px !important;
+  }
+
+  .campo {
+    font-size: 18px !important;
+  }
+
+  .campo span {
+    font-size: 15px !important;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  .govbr {
+    font-size: 18px !important;
+  }
+
+  .fp-box {
+    width: 100px !important;
+    height: 130px !important;
+  }
+}
+
+
+
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-left">
+    <span class="seta" onclick="window.history.back();">&#8592;</span>
+    <span>Detalhamento</span>
+  </div>
+  <div class="info-icon">i</div>
+</div>
+
+
+
+
+
+  <h1>RG Digital</h1>
+  <div class="govbr">GovBR</div>
+
+<div class="fingerprint">
+  <div class="fp-box">
+    <img src="/static/rgs/impressaodig.jpg" alt="Impressão digital">
+
+    <div class="fp-bar"></div>
+  </div>
+</div>
+
+
+
+  <div class="info">
+    <div class="campo">
+      <span>Nome / Name:</span> {{ dados.nome }}
+    </div>
+    <div class="campo">
+      <span>Nome Social / Social Name:</span> {{ dados.nome_social or '' }}
+    </div>
+    <div class="campo">
+      <span>Registro Geral-CPF / Personal Number:</span> {{ dados.cpf }}
+    </div>
+    <div class="campo">
+      <span>Sexo / Sex:</span> {{ dados.sexo }}
+    </div>
+    <div class="campo">
+      <span>Data de Nascimento / Date of Birth:</span> {{ dados.data_nascimento }}
+    </div>
+    <div class="campo">
+      <span>Nacionalidade / Nationality:</span> {{ dados.nacionalidade }}
+    </div>
+    <div class="campo">
+      <span>Naturalidade / Place of Birth:</span> {{ dados.naturalidade }}
+    </div>
+    <div class="campo">
+      <span>Data de Validade / Date of Expiry:</span> {{ dados.data_validade }}
+    </div>
+    <div class="campo">
+      <span>Filiação  / Filiation :</span>
+      {{ dados.nome_pai }}
+    </div>
+
+    <div class="campo">
+      <span>Filiação / Filiation :</span>
+      {{ dados.nome_mae }}
+    </div>
+
+    <div class="campo">
+      <span>Órgão Expedidor / Card Issuer:</span> {{ dados.orgao_expedidor }}
+    </div>
+    <div class="campo">
+      <span>Local / Place of Issue:</span> {{ dados.local }}
+    </div>
+    <div class="campo">
+      <span>Data de Emissão / Issue Date:</span> {{ dados.data_emissao }}
+    </div>
+    <div class="campo">
+      <span>Certidão de Nasc / Casamento / Averb. Divórcio:</span> {{ dados.certidao }}
+    </div>
+    <div class="campo">
+      <span>Hash:</span> {{ dados.hash }}
+    </div>
+  </div>
+
+</body>
+</html>

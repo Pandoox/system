@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualizar CNH Digital</title>
+  <style>
+    body {
+      background-color: #111827;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    iframe {
+      border: 2px solid #111827;
+      border-radius: 8px;
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .buttons a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .buttons a:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Prévia da CNH Digital</h1>
+
+  <iframe src="{{ url_for('static', filename='cnhs/' ~ usuario ~ '/' ~ cnh['arquivo']) }}" width="100%" height="800px"></iframe>
+
+
+  <div class="buttons">
+    <form action="{{ url_for('salvar_cnh') }}" method="POST">
+  <input type="hidden" name="numero_registro" value="{{ numero_registro }}">
+  <input type="hidden" name="nome_completo" value="{{ nome_completo }}">
+  <input type="hidden" name="local_uf" value="{{ local_uf }}">
+  
+</form>
+
+    
+
+    <a href="{{ url_for('baixar_pdf_usuario', usuario=session['usuario'], nome_arquivo=cnh['arquivo']) }}" class="btn-baixar">
+  <i class="fas fa-download"></i>📥  Baixar CNH
+</a>
+    <a href="{{ url_for('formulario', chave=chave_qr) }}" class="btn btn-primary">🔄 Voltar e editar</a>
+
+
+  </div>
+</body>
+</html>

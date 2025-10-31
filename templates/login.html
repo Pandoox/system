@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Beed.club</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color:#111827;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background-color: #111827;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 24px;
+      font-size: 28px;
+      color: #00ffcc;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #1F2937;
+      color: #f0f0f0;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00ffcc;
+      color: #121212;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00e6b3;
+    }
+
+    .telegram-link {
+      display: block;
+      margin-top: 20px;
+      color: #00ffcc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .telegram-link:hover {
+      text-decoration: underline;
+    }
+
+    #message {
+      margin-top: 16px;
+      color: #ff6666;
+      font-size: 14px;
+    }
+.alerta-erro {
+  position: relative;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background-color: #ff4d4d;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  animation: fadeOut 1s ease-in-out forwards;
+  animation-delay: 1s;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-5px);
+    visibility: hidden;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+
+  <div class="login-box">
+    <h2>Beed.club</h2>
+    <form method="POST" action="/login">
+<input type="text" id="usuario" name="usuario" placeholder="Usuário" required />
+<input type="password" id="senha" name="senha" placeholder="Senha" required />
+
+  <button type="submit">Entrar</button>
+  
+</form>
+{% if erro %}
+  <div class="alerta-erro">
+    <p>{{ erro }}</p>
+  </div>
+{% endif %}
+
+
+    <a class="telegram-link" href="https://t.me/seuusuario" target="_blank">
+      Não possui cadastro? Contatar pelo Telegram
+    </a>
+    <div id="message">{{ mensagem }}</div>
+  </div>
+
+
+
+
+
+
+{% if erro %}
+<script>
+  window.onload = function () {
+    const senhaInput = document.getElementById('senha');
+    senhaInput.setCustomValidity("Usuário ou senha incorretos");
+    document.querySelector('form').reportValidity();
+
+    senhaInput.addEventListener('input', function () {
+      this.setCustomValidity("");
+    });
+  };
+</script>
+{% endif %}
+
+
+
+</body>
+</html>

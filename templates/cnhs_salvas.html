@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>CNHs Salvas</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      background-color: #111827;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 40px;
+    }
+
+    h2 {
+      color: #00ffcc;
+      font-size: 28px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #06080e;
+      padding-bottom: 10px;
+    }
+
+    .mensagem {
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    .mensagem.sucesso {
+      background-color: #00ffcc;
+    }
+
+    .mensagem.erro {
+      background-color: #ff4d4d;
+    }
+
+    .cnh-lista {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .cnh-item {
+      background-color: #111827;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.4);
+      transition: background 0.3s ease;
+    }
+
+    .cnh-item:hover {
+      background-color: #0a0e18;
+    }
+
+    .acoes {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-baixar {
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .btn-baixar:hover {
+      text-decoration: underline;
+    }
+
+    .excluir-btn {
+      background: none;
+      border: none;
+      color: red;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .excluir-btn:hover {
+      text-decoration: underline;
+    }
+
+    .botao-voltar {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 18px;
+      background-color: #00ffcc;
+      color: #000;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .botao-voltar:hover {
+      background-color: #00e6b8;
+    }
+  </style>
+</head>
+<body>
+  <h2>CNHs Salvas</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="mensagem {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <ul class="cnh-lista">
+    {% if cnhs_salvas %}
+{% for cnh in cnhs_salvas %}
+  <li class="cnh-item">
+    <span>{{ cnh.nome }} — {{ cnh.uf }} — {{ cnh.data }}</span>
+    <div class="acoes">
+<a href="{{ url_for('baixar_pdf_usuario', usuario=session['usuario'], nome_arquivo=cnh['arquivo']) }}" class="btn-baixar">
+  <i class="fas fa-download"></i> Baixar CNH
+</a>
+
+<form action="{{ url_for('excluir_cnh', id=cnh.id) }}" method="POST">
+  <button type="submit" class="excluir-btn">
+    <i class="fas fa-trash-alt"></i> Excluir
+  </button>
+</form>
+
+    </div>
+  </li>
+{% endfor %}
+
+    {% else %}
+      <li class="cnh-item">Nenhuma CNH salva ainda.</li>
+    {% endif %}
+  </ul>
+
+  <a href="/dashboard" class="botao-voltar">← Voltar ao Dashboard</a>
+
+  <script>
+    setTimeout(() => {
+      document.querySelectorAll('.mensagem').forEach(msg => {
+        msg.style.display = 'none';
+      });
+    }, 1000);
+  </script>
+</body>
+</html>

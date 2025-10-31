@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Atestado Médico - HAPVIDA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111827;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #111827;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      color: #ffffff;
+      background-color: #1F2937;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .botao-voltar {
+      display: inline-block;
+      margin-top: -43px;
+      margin-left: auto;
+      padding: 12px 20px;
+      background-color: #00ffcc;
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 13px;
+      box-shadow: 0 2px 6px rgba(0, 255, 204, 0.4);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .botao-voltar-container {
+      display: flex;
+    }
+
+    .botao-voltar:hover {
+      background-color: #00e6b8;
+      transform: translateY(-2px);
+    }
+
+    .mensagem {
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #000;
+      text-align: center;
+    }
+
+    .mensagem.erro {
+      background-color: #ff4d4d;
+    }
+
+    .mensagem.sucesso {
+      background-color: #00ffcc;
+    }
+  </style>
+
+  <script>
+    function preencherDescricaoCID() {
+      const cidSelect = document.querySelector('select[name="cid"]');
+      const cidTexto = document.querySelector('input[name="cid_personalizado"]');
+
+      const nome = document.querySelector('input[name="nome_paciente"]').value || "[nome]";
+      const dataHora = document.querySelector('input[name="data_hora_atendimento"]').value;
+      const data = dataHora.split("T")[0] || "[data]";
+      const horario = dataHora.split("T")[1] || "[horário]";
+      const dias = document.querySelector('input[name="dias_repouso"]').value || "[dias]";
+      const diaInicio = document.querySelector('input[name="liberado_em"]').value || "[início]";
+
+      const descricoes = {
+        "J11": `Atesto que atendi nesta data ${data} o(a) Sr(a) ${nome} às ${horario}, sendo necessário seu afastamento do local de trabalho ou escola por ${dias} dia(s), a partir de ${diaInicio}, tendo como causa do atendimento o código abaixo:\n\nCID 10 - J11\n...........................\nCódigo da Doença`,
+        "A09": `Atesto que atendi nesta data ${data} o(a) Sr(a) ${nome} às ${horario}, sendo necessário seu afastamento do local de trabalho ou escola por ${dias} dia(s), a partir de ${diaInicio}, tendo como causa do atendimento o código abaixo:\n\nCID 10 - A09\n...........................\nCódigo da Doença`,
+        "A90": `Atesto que atendi nesta data ${data} o(a) Sr(a) ${nome} às ${horario}, sendo necessário seu afastamento do local de trabalho ou escola por ${dias} dia(s), a partir de ${diaInicio}, tendo como causa do atendimento o código abaixo:\n\nCID 10 - A90\n...........................\nCódigo da Doença`,
+        "H66": `Atesto que atendi nesta data ${data} o(a) Sr(a) ${nome} às ${horario}, sendo necessário seu afastamento do local de trabalho ou escola por ${dias} dia(s), a partir de ${diaInicio}, tendo como causa do atendimento o código abaixo:\n\nCID 10 - H66\n...........................\nCódigo da Doença`,
+        "R50": `Atesto que atendi nesta data ${data} o(a) Sr(a) ${nome} às ${horario}, sendo necessário seu afastamento do local de trabalho ou escola por ${dias} dia(s), a partir de ${diaInicio}, tendo como causa do atendimento o código abaixo:\n\nCID 10 - R50\n...........................\nCódigo da Doença`
+      };
+
+      const valorSelecionado = cidSelect.value;
+      if (descricoes[valorSelecionado]) {
+        cidTexto.value = descricoes[valorSelecionado];
+      } else {
+        cidTexto.value = "";
+      }
+    }
+  </script>
+</head>
+<body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="mensagem {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+  <h1>Atestado Médico - HAPVIDA</h1>
+
+  <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <a href="/formulario_medico/upa">
+      <button type="button" style="background-color: #00ffcc; color: black;">Modelo UPA</button>
+    </a>
+    <a href="/formulario_medico/hapvida">
+      <button type="button" style="background-color: #ffcc00; color: black;">Modelo HAPVIDA</button>
+    </a>
+  </div>
+
+  <form action="{{ url_for('gerar_atestado') }}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="modelo_base" value="{{ modelo_padrao }}">
+
+          <label>Modelo da Base:</label>
+      <select name="modelo_base" required>
+        <option value="upa">HAPVIDA</option>
+      </select>
+
+    <!--  <label>Para:</label>
+    <input type="text" name="para" placeholder="SEU NOME E SOBRE NOME: Joao silva Matos" required>-->
+
+    <label>Nome da Paciente:</label>
+    <input type="text" name="nome_paciente" placeholder="SEU NOME E SOBRE NOME: Joao silva Matos" required>
+
+    <label>Cidade</label>
+    <input type="text" name="cns"> 
+
+    <label>Unidade:</label>
+    <input type="text" name="unidade" placeholder="DIGITE EXATAMENTE: UPA 24h OU HAPVIDA" value="HAPVIDA">
+
+    <label>Data e Hora do Atendimento:</label>
+    <input type="datetime-local" name="data_hora_atendimento">
+
+    <label>Dias de Repouso:</label>
+    <input type="number" name="dias_repouso" placeholder="1, 2, 3..." min="0">
+
+    <label>CID:</label>
+    <select name="cid" onchange="preencherDescricaoCID()">
+      <option value="">Selecione</option>
+      <option value="J11">J11 - Gripe não identificada</option>
+      <option value="A09">A09 - Diarreia e gastroenterite infecciosa</option>
+      <option value="A90">A90 - Dengue clássica</option>
+      <option value="H66">H66 - Otite média</option>
+      <option value="R50">R50 - Febre de origem desconhecida</option>
+    </select>
+
+    <label>Descrição da Doença:</label>
+    <input type="text" name="cid_personalizado" placeholder="Ou digite outro CID ou causa da doença">
+
+    <label>Local e Data:</label>
+    <input type="text" name="local_data" placeholder="ESTADO E A DATA DO ATENDIMENTO EX: São Paulo 16/10/2025 ">
+
+    <label>Emissão:</label>
+    <input type="date" name="emissao">
+
+    <label>Liberado em:</label>
+    <input type="date" name="liberado_em">
+
+    <label>Hora da Liberação:</label>
+    <input type="time" name="hora_liberacao">
+
+    <label>Médico Responsável:</label>
+    <input type="text" name="medico" placeholder="PESQUISE O NOME DE UM MEDICO NA SUA CIDADE EX: Ricardo Jorge">
+
+    <label>CRM:</label>
+    <input type="text" name="crm" placeholder="PESQUISE O CRM DE ACORDO COM O MEDICO PESQUISADO DA SUA CIDADE">
+
+   <!--  <label>Rua e Número:</label>
+    <input type="text" name="rua_numero" placeholder="EX: Osvaldo Aranha, 41">-->
+
+    <!-- <label>Bairro e Cidade + Sigla cidade:</label>
+    <input type="text" name="bairro_cidade" placeholder="EX: Vila Charmosa, São Paulo SP">-->
+
+    <!-- <label>CEP:</label>
+    <input type="text" name="cep" placeholder="CEP DA RUA ONDE FICA A HAPVIDA">  -->
+
+    <label for="assinatura">Rubrica / Assinatura:</label>
+    <input type="file" name="assinatura" accept="image/*">
+
+    <button type="submit">Gerar Atestado</button>
+
+    <div class="botao-voltar-container">
+      <a href="/dashboard" class="botao-voltar">↩️ Voltar ao Dashboard</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.mensagem').forEach(msg => {
+      msg.style.display = 'none';
+    });
+  }, 2000);
+</script>
+
+</body>
+</html>

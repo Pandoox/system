@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil de {{ usuario }}</title>
+  <style>
+    body {
+      background-color: #111827;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .perfil {
+      background-color: #1f2937;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,255,204,0.2);
+    }
+    h2 {
+      color: #00ffcc;
+      margin-bottom: 20px;
+    }
+    p {
+      margin: 8px 0;
+    }
+    h3 {
+      margin-top: 30px;
+      color: #00ffcc;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      background-color: #2d3748;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+    }
+    .btn-dashboard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  background-color: #008167;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: background 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+.btn-dashboard:hover {
+  background-color: #00a685;
+  transform: scale(1.03);
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="perfil">
+    <h2>Perfil de {{ usuario }}</h2>
+    <p><strong>Tipo de Conta:</strong> {{ dados.tipo }}</p>
+    <p><strong>Créditos:</strong> R$ {{ dados.creditos }}</p>
+    <p><strong>Criado por:</strong> {{ dados.criado_por }}</p>
+
+    <h3>Histórico de Créditos</h3>
+    {% if dados.historico_creditos %}
+      <ul>
+        {% for transacao in dados.historico_creditos %}
+          <li>R$ {{ transacao.valor }} — {{ transacao.data }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Nenhum crédito registrado.</p>
+    {% endif %}
+
+    <h3>Serviços Utilizados</h3>
+    <ul>
+      <li>CNHs geradas: {{ dados.total_cnhs }}</li>
+      <li>Atestados gerados: {{ dados.total_atestados }}</li>
+    </ul>
+
+
+    <a href="/dashboard" class="btn-dashboard">Ir para o Dashboard</a>
+  </div>
+</body>
+</html>

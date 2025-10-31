@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel do Revendedor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='painel_revendedor.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body class="painel-revendedor">
+
+  <!-- Mensagens flash -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <header class="top-bar">
+    <h2>Painel do Revendedor: <span>{{ revendedor }}</span></h2>
+    <p class="saldo">Saldo disponível: <strong>R$ {{ creditos }}</strong></p>
+  </header>
+
+  <section class="card">
+    <h3>🧾 Criar novo cliente</h3>
+    <form method="POST" class="form-criar">
+      <input type="text" name="usuario" placeholder="Nome do cliente" required />
+      <input type="password" name="senha" placeholder="Senha" required />
+      <input type="number" name="creditos" placeholder="Créditos iniciais" min="0" required />
+      <button type="submit" class="btn btn-criar">Criar cliente</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>💸 Transferir saldo para cliente</h3>
+    <form method="POST" class="form-transferir">
+      <input type="text" name="destino" placeholder="Nome do cliente" required />
+      <input type="number" name="valor" placeholder="Valor" min="1" required />
+      <button type="submit" class="btn btn-transferir">Transferir</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>📋 Clientes cadastrados</h3>
+    <table class="tabela-clientes">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Créditos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for nome, dados in clientes.items() %}
+        <tr>
+          <td>{{ nome }}</td>
+          <td>R$ {{ dados.creditos }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="acoes">
+    <a href="/dashboard" class="btn btn-dashboard">Ir para o Dashboard</a>
+    <a href="/logout" class="btn btn-sair">Sair</a>
+  </footer>
+<script>
+  // Remove alertas automaticamente após 5 segundos
+  setTimeout(() => {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+      alert.style.opacity = '0';
+      setTimeout(() => alert.remove(), 500); // remove após fade-out
+    });
+  }, 5000);
+</script>
+
+</body>
+</html>

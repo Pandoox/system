@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Beed.club - Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+
+<!-- Saldo no canto superior esquerdo -->
+<div class="saldo-esquerda">
+  <p class="saldo-topo">Saldo: R$ {{ creditos }}</p>
+</div>
+
+<!-- Perfil no canto superior direito -->
+<div class="menu-perfil-wrapper" onmouseenter="mostrarMenu()" onmouseleave="agendarOcultarMenu()">
+  <button class="perfil-botao">👤</button>
+  <div id="menu-perfil" class="menu-perfil" onmouseenter="cancelarOcultarMenu()" onmouseleave="agendarOcultarMenu()">
+    <a href="/perfil">Ver Perfil</a>
+    <a href="/logout">Sair</a>
+  </div>
+</div>
+
+
+
+<div class="container">
+<aside class="sidebar">
+  <h2>Beed.club</h2>
+
+<nav>
+  <a href="{{ url_for('cnhs_salvas') }}" class="botao-ver-cnhs">Ver CNHs Salvas</a>
+  <a href="{{ url_for('atestados_salvos') }}" class="botao-ver-cnhs">Ver Atestados Salvos</a>
+  <a href="{{ url_for('rgs_salvos') }}" class="botao-ver-cnhs">Ver RGs Salvos</a>
+  <a href="{{ url_for('comprovantes_salvos') }}" class="botao-ver-cnhs">Ver Comp Salvos</a>
+</nav>
+
+
+  <!-- Botões fixos no rodapé da sidebar -->
+  <div class="painel-acesso">
+    {% if dados.tipo == 'admin' %}
+      <a href="/admin" class="btn-painel">Painel Administrativo</a>
+    {% elif dados.tipo == 'revendedor' %}
+      <a href="/painel_revendedor" class="btn-painel">Painel do Gerente</a>
+
+    {% elif dados.tipo == 'gerente' %}
+      <a href="/painel_gerente" class="btn-painel">Painel do Gerente</a>
+
+    {% endif %}
+  </div>
+</aside>
+
+  
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <h1>Serviços Disponíveis</h1>
+
+    <div class="card-grid">
+      <form method="POST" action="/verificar_credito" class="card-form">
+        <button type="submit" class="card full-click">
+          <h3>Criar CNH</h3>
+          <p>Crie CNHs personalizadas</p>
+          <span class="status online">Online</span>
+        </button>
+      </form>
+
+      <form method="POST" action="/verificar_credito_medico" class="card-form">
+        <button type="submit" class="card full-click">
+          <h3>Criar ATESTADO</h3>
+          <p>Gerar declaração médica personalizada</p>
+          <span class="status online">Online</span>
+        </button>
+      </form>
+          
+      <form method="POST" action="/verificar_credito_rg" class="card-form">
+        <button type="submit" class="card full-click">
+          <h3>Criar RG</h3>
+          <p>Gerar documento de identidade personalizado</p>
+          <span class="status online">Online</span>
+        </button>
+      </form>
+
+          
+<form method="POST" action="/verificar_credito_comprovante" class="card-form">
+  <button type="submit" class="card full-click">
+    <h3>Criar Comprovante</h3>
+    <p>Gerar Comprovante personalizado</p>
+    <span class="status online">Online</span>
+  </button>
+</form>
+
+
+
+
+      
+
+
+    </div>
+  </main>
+</div>
+
+<!-- Estilo para os botões de painel -->
+<style>
+  .btn-painel {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #00bcd4;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  .btn-painel:hover {
+    background-color: #0097a7;
+  }
+</style>
+
+<script>
+  setTimeout(() => {
+    const flash = document.querySelector('.flash');
+    if (flash) {
+      flash.style.opacity = '0';
+      setTimeout(() => flash.remove(), 500);
+    }
+  }, 2000);
+
+  let ocultarTimeout;
+
+  function mostrarMenu() {
+    clearTimeout(ocultarTimeout);
+    document.getElementById('menu-perfil').style.display = 'block';
+  }
+
+  function agendarOcultarMenu() {
+    ocultarTimeout = setTimeout(() => {
+      document.getElementById('menu-perfil').style.display = 'none';
+    }, 400);
+  }
+
+  function cancelarOcultarMenu() {
+    clearTimeout(ocultarTimeout);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerar CNH Digital</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #111827;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      background-color: #111827;
+      border: 1px solid #384b66;;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      background-color: #1F2937;
+      color: #fff;
+      border: 1px solid #384b66;;
+      text-transform: uppercase;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    .row input, .row select {
+      flex: 1;
+    }
+    button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .botao-voltar {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  background-color: #1F2937;
+  color: #00ffcc;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.botao-voltar:hover {
+  background-color: #161d27;
+}
+#observacoes-container {
+  display: block;
+}
+
+.campo-observacao {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+#observacoes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.campo-observacao {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #212f42;
+  background-color: #1F2937;
+  color: #fff;
+}
+
+  .alerta-edicao {
+    background-color: #ffe6e6;
+    border: 1px solid #ff4d4d;
+    color: #b30000;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .alerta-edicao .icone {
+    font-size: 20px;
+  }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CNH Digital</h1>
+
+      {% if erro %}
+    <div class="alerta-edicao">
+      <span class="icone">❌</span> {{ erro }}
+    </div>
+  {% endif %}
+
+    <form action="{{ url_for('gerar_cnh') }}" method="POST" enctype="multipart/form-data">
+
+      <label>Nome Completo:</label>
+      <input type="text" name="nome_completo" value="{{ dados.nome or '' }}" placeholder="Ex: RITA DE CASSIA MONTEIRO DE ARAUJO" required>
+
+      <label>1ª Habilitação (Data):</label>
+      <input type="date" name="primeira_habilitacao" value="{{ dados.primeira_habilitacao or '' }}">
+
+      <label>Data, Local e UF de Nascimento:</label>
+      <div class="row">
+        <input type="date" name="data_nascimento" value="{{ dados.data_nascimento or '' }}" required>
+        <input type="text" name="local_nascimento" value="{{ dados.local_nascimento or '' }}" placeholder="Ex: BELO HORIZONTE" required>
+        <select name="uf_nascimento" required>
+          <option value="">UF</option>
+          {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PE','PI','PR','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+            <option value="{{ uf }}" {% if dados.uf_nascimento == uf %}selected{% endif %}>{{ uf }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+  <label>Data de Emissão / Validade:</label>
+      <div class="row">
+        <input type="date" name="data_emissao" value="{{ dados.data_emissao or '' }}">
+        <input type="date" name="validade" value="{{ dados.validade or '' }}" required>
+      </div>
+
+     <label> CATEGORIA: </label>
+      <div class="row">
+        
+        <input type="text" name="categoria_habilitacao" value="{{ dados.categoria_habilitacao or '' }}" placeholder="Ex: A ou B ou AB (se for duas ou mais)" required>
+      </div>
+
+      <label>Documento de Identidade:</label>
+      <div class="row">
+        <input type="text" name="doc_identidade" value="{{ dados.doc_identidade or '' }}" placeholder="Número Rg" required>
+        <input type="text" name="orgao_emissor" value="{{ dados.orgao_emissor or '' }}"   placeholder="Ex: SSP ou SDS " required>
+        <select name="uf_documento" required>
+          <option value="">UF</option>
+          {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PE','PI','PR','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+            <option value="{{ uf }}" {% if dados.uf_documento == uf %}selected{% endif %}>{{ uf }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+  <label>Nacionalidade:</label>
+      <input type="text" name="nacionalidade" value="{{ dados.nacionalidade or 'Brasileiro' }}">
+
+      <label>Nome do Pai:</label>
+      <div class="row">
+        <input type="text" name="nome_pai" placeholder="RONALDO FENOMENO NEYMAR DA SILVA" value="{{ dados.nome_pai or '' }}">
+
+        <input type="text" name="nome_mae" value="{{ dados.nome_mae or '' }}" placeholder="ANDRESSA URACH POLIDORA DE BANA">
+      </div>
+
+<label>UF da CNH:</label>
+<select name="local_uf" id="local_uf" required onchange="gerarNumero('numero_renach')">
+
+  <option value="">UF</option>
+  {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PE','PI','PR','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+    <option value="{{ uf }}" {% if dados.local_uf == uf %}selected{% endif %}>{{ uf }}</option>
+  {% endfor %}
+</select>
+
+
+      <label>CPF, Sexo Condutor e Nº Registro:</label>
+      <div class="row">
+        <input type="text" name="cpf" value="{{ dados.cpf or '' }}" placeholder="000.000.000-00" required>
+        <select name="sexo">
+          <option value="Masculino" {% if dados.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+          <option value="Feminino" {% if dados.sexo == 'Feminino' %}selected{% endif %}>Feminino</option>
+        </select>
+        <input type="text" name="numero_registro" id="numero_registro" value="{{ dados.numero_registro or '' }}" required>
+        <button type="button" onclick="gerarNumero('numero_registro')">Gerar</button>
+      </div>
+
+      <label>Número espelho CNH, Código de Validação e Número do RENACH:</label>
+      <div class="row">
+
+<input type="text" name="numero_espelho" id="numero_espelho" placeholder="0000000000" required>
+<button type="button" onclick="gerarNumero('numero_espelho')">Gerar</button>
+
+<!-- Código de Validação -->
+
+<input type="text" name="codigo_validacao" id="codigo_validacao" placeholder="0000000000" required>
+<button type="button" onclick="gerarNumero('codigo_validacao')">Gerar</button>
+
+<!-- Número RENACH -->
+
+<input type="text" name="numero_renach" id="numero_renach" placeholder="PE00000000" required>
+<button type="button" onclick="gerarNumero('numero_renach')">Gerar</button>
+<span id="renach-status" class="status-text"></span>
+
+      </div>
+
+ <label>Categorias de Habilitação com Datas de Validade:</label>
+      <div id="categorias">
+        <div class="row">
+          <select name="categoria[]">
+            <option value="">Selecione</option>
+            {% for cat in ['ACC','A','A1','B','B1','C','C1','D','D1','BE','CE','C1E','DE','D1E'] %}
+              <option value="{{ cat }}" {% if dados.categoria == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+          <input type="date" name="validade_categoria[]" value="{{ dados.validade_categoria[0] if dados.validade_categoria else '' }}">
+        </div>
+      </div>
+      <button type="button" onclick="adicionarCategoria()">+ Adicionar categoria</button>
+
+    <div id="observacoes-container">
+        <label>Observações:</label>
+        {% if dados.observacoes %}
+          {% for obs in dados.observacoes %}
+            <input type="text" name="observacoes[]" class="campo-observacao" value="{{ obs }}">
+          {% endfor %}
+        {% else %}
+          <input type="text" name="observacoes[]" class="campo-observacao" placeholder="Digite uma observação: EAR (Ou O que tiver na sua)">
+        {% endif %}
+      </div>
+      <button type="button" onclick="adicionarObservacao()">+ Adicionar observação</button>
+
+
+
+
+
+      <!-- Uploads
+   <label>UF da CNH:</label>
+      <input type="text" name="uf_cnh" value="{{ dados.uf_cnh or '' }}"> -->
+
+      <label>Cidade da Habilitação e UF do Estado:</label>
+      <div class="row">
+        <input type="text" name="local_municipio" value="{{ dados.local_municipio or '' }}" placeholder="BELO HORIZONTE">
+        <select name="uf_habilitacao">
+          <option value="">UF</option>
+          {% for uf in ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PE','PI','PR','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] %}
+            <option value="{{ uf }}" {% if dados.uf_habilitacao == uf %}selected{% endif %}>{{ uf }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+
+      <!-- Uploads -->
+      <label>Assinatura (imagem):</label>
+      <small class="text-muted">* Remova o fundo da Assinatura antes de enviar</small>
+      <input type="file" name="assinatura" accept="image/*" required>
+
+      <label>Foto 3x4:</label>
+      <small class="text-muted">* Remova o fundo da imagem antes de enviar</small>
+      <input type="file" name="foto_3x4" accept="image/*" required>
+
+      <button type="submit">Criar CNH</button>
+      <a href="/dashboard" class="botao-voltar">← Voltar</a>
+
+    </form>
+  </div>
+
+<script>
+  function adicionarCategoria() {
+    const container = document.getElementById('categorias');
+    const grupo = document.createElement('div');
+    grupo.className = 'row categoria-grupo';
+    grupo.innerHTML = `
+      <select name="categoria[]" required>
+        <option value="">Selecione</option>
+        <option value="ACC">ACC</option>
+        <option value="A">A</option>
+        <option value="A1">A1</option>
+        <option value="B">B</option>
+        <option value="B1">B1</option>
+        <option value="C">C</option>
+        <option value="C1">C1</option>
+        <option value="D">D</option>
+        <option value="D1">D1</option>
+        <option value="BE">BE</option>
+        <option value="CE">CE</option>
+        <option value="C1E">C1E</option>
+        <option value="DE">DE</option>
+        <option value="D1E">D1E</option>
+      </select>
+      <input type="date" name="validade_categoria[]" required>
+    `;
+    container.appendChild(grupo);
+  }
+
+function gerarNumero(id) {
+  const campo = document.getElementById(id);
+
+  if (id === 'numero_renach') {
+    const status = document.getElementById('renach-status');
+    const ufSelect = document.getElementById('local_uf');
+    const uf = ufSelect ? ufSelect.value : "";
+
+    if (!uf) {
+      alert('Selecione a UF da CNH antes de gerar o número RENACH.');
+      status.textContent = "";
+      return;
+    }
+
+   
+
+    setTimeout(() => {
+      const numeros = Math.floor(10000000 + Math.random() * 90000000); // 8 dígitos
+      const renach = uf + numeros;
+      campo.value = renach;
+      
+    }, 500);
+  } else {
+    const numero = Math.floor(1000000000 + Math.random() * 9000000000); // 10 dígitos
+    campo.value = numero.toString();
+  }
+}
+
+  function adicionarObservacao() {
+    const container = document.getElementById('observacoes-container');
+    const campos = container.querySelectorAll('input[name="observacoes[]"]');
+
+    if (campos.length >= 5) {
+      alert("Você só pode adicionar até 5 observações.");
+      return;
+    }
+
+    const novoCampo = document.createElement('input');
+    novoCampo.type = 'text';
+    novoCampo.name = 'observacoes[]';
+    novoCampo.className = 'campo-observacao';
+    novoCampo.placeholder = 'Digite uma observação';
+    container.appendChild(novoCampo);
+  }
+</script>
+
+
+
+
+
+</script>
+
+</body>
+</html>

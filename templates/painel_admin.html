@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel ADM - Beed.club</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+  <h2>Painel Administrativo</h2>
+
+  <!-- Formulário de criação de novo usuário -->
+  <form method="POST" class="user-create">
+    <label for="usuario">Novo usuário</label>
+    <input type="text" id="usuario" name="usuario" placeholder="Digite o nome de usuário" required />
+
+    <label for="senha">Senha</label>
+    <input type="password" id="senha" name="senha" placeholder="Digite a senha" required />
+
+    <label for="creditos">Créditos iniciais</label>
+    <input type="number" id="creditos" name="creditos" placeholder="Ex: 10" min="0" required />
+
+    <label for="tipo">Tipo de usuário</label>
+    <select id="tipo" name="tipo" required>
+      <option value="usuario">Usuário</option>
+      <option value="revendedor">Revendedor</option>
+      <option value="gerente">Gerente</option>
+    </select>
+
+    <button type="submit">Criar usuário</button>
+    <a href="/dashboard" class="btn-dashboard">Ir para o Dashboard</a>
+  </form>
+
+  <!-- Tabela de usuários cadastrados -->
+  <h3>Usuários cadastrados:</h3>
+  <table class="user-table">
+    <thead>
+      <tr>
+        <th>Usuário</th>
+        <th>Créditos</th>
+        <th>Tipo</th>
+        <th>Criado por</th>
+        <th colspan="2">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for nome, dados in usuarios.items() %}
+      <tr>
+        <td><strong>{{ nome }}</strong></td>
+        <td>
+<form action="/admin/atualizar_credito" method="POST" style="display:inline;">
+  <input type="hidden" name="editar_usuario" value="{{ nome }}">
+  <input type="number" name="novo_credito" value="{{ dados.creditos }}" min="0" />
+  <button type="submit">Atualizar</button>
+</form>
+
+        </td>
+        <td>{{ dados.tipo }}</td>
+        <td>{{ dados.get('criado_por') or dados.get('revendedor') or 'admin' }}</td>
+        <td>
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="excluir_usuario" value="{{ nome }}">
+            <button type="submit" class="excluir">Excluir</button>
+          </form>
+        </td>
+<td style="white-space: nowrap;">
+  {% if tipo_logado == 'admin' %}
+    <form method="GET" action="/ver_perfil" style="display:inline;">
+      <input type="hidden" name="usuario" value="{{ nome }}">
+      <button type="submit" class="ver-perfil">Ver Perfil</button>
+    </form>
+  {% endif %}
+
+  <form style="display:inline;">
+    <button type="button" class="trocar-senha" data-usuario="{{ nome }}">Trocar Senha</button>
+  </form>
+
+<div class="troca-senha-box" style="display: none; margin-top: 8px;">
+  <form method="POST" action="/trocar_senha" style="display:inline-block; margin-right: 8px;">
+    <input type="hidden" name="usuario_troca" value="{{ nome }}">
+    <input type="password" name="nova_senha" placeholder="Nova senha" required />
+    <button type="submit">Salvar</button>
+  </form>
+
+  <button type="button" class="cancelar-senha">Cancelar</button>
+</div>
+
+
+</td>
+
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Botão de logout -->
+  <a href="/logout" class="btn-sair">Sair</a>
+
+<script>
+  document.querySelectorAll('.trocar-senha').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const linha = botao.closest('td');
+      const box = linha.querySelector('.troca-senha-box');
+      box.style.display = 'block';
+    });
+  });
+
+  document.querySelectorAll('.cancelar-senha').forEach(botao => {
+    botao.addEventListener('click', () => {
+      const box = botao.closest('.troca-senha-box');
+      box.style.display = 'none';
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualizar Atestado Digital</title>
+  <style>
+    body {
+      background-color: #111827;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .pdf-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    iframe {
+      width: 90vw;
+      height: 85vh;
+      border: none;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .buttons a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .buttons a:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Prévia do Atestado Médico</h1>
+
+  <div class="pdf-container">
+    <iframe src="{{ url_for('arquivo_atestado') }}?chave={{ chave }}"></iframe>
+  </div>
+
+  <div class="buttons">
+    <a href="{{ url_for('arquivo_atestado') }}?chave={{ chave }}" download>📥 Baixar </a>
+    <a href="{{ url_for('formulario_atestado') }}">✏️ Editar</a>
+    <a href="/atestados_salvos">↩️ Voltar</a>
+  </div>
+</body>
+</html>

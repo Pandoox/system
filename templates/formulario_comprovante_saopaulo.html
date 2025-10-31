@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário Comprovante São Paulo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111827;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #1F2937;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #00ffcc;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #374151;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #00e6b8;
+    }
+
+    .inline-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Formulário Comprovante São Paulo</h1>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div style="background-color: #ff4444; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+      {% for category, message in messages %}
+        <strong>{{ message }}</strong>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+
+
+    <form action="/gerar_documento" method="POST">
+
+
+      <div style="margin-top: 30px;">
+  <label>Escolha seu estado:</label>
+  <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+    <button type="button" onclick="irParaEstado('AC')">AC</button>
+    <button type="button" onclick="irParaEstado('AL')">AL</button>
+    <button type="button" onclick="irParaEstado('AP')">AP</button>
+    <button type="button" onclick="irParaEstado('AM')">AM</button>
+    <button type="button" onclick="irParaEstado('BA')">BA</button>
+    <button type="button" onclick="irParaEstado('CE')">CE</button>
+    <button type="button" onclick="irParaEstado('DF')">DF</button>
+    <button type="button" onclick="irParaEstado('ES')">ES</button>
+    <button type="button" onclick="irParaEstado('GO')">GO</button>
+    <button type="button" onclick="irParaEstado('MA')">MA</button>
+    <button type="button" onclick="irParaEstado('MT')">MT</button>
+    <button type="button" onclick="irParaEstado('MS')">MS</button>
+    <button type="button" onclick="irParaEstado('MG')">MG</button>
+    <button type="button" onclick="irParaEstado('PA')">PA</button>
+    <button type="button" onclick="irParaEstado('PB')">PB</button>
+    <button type="button" onclick="irParaEstado('PR')">PR</button>
+    <button type="button" onclick="irParaEstado('PE')">PE</button>
+    <button type="button" onclick="irParaEstado('PI')">PI</button>
+    <button type="button" onclick="irParaEstado('RJ')">RJ</button>
+    <button type="button" onclick="irParaEstado('RN')">RN</button>
+    <button type="button" onclick="irParaEstado('RS')">RS</button>
+    <button type="button" onclick="irParaEstado('RO')">RO</button>
+    <button type="button" onclick="irParaEstado('RR')">RR</button>
+    <button type="button" onclick="irParaEstado('SC')">SC</button>
+    <button type="button" onclick="irParaEstado('SP')">SP</button>
+    <button type="button" onclick="irParaEstado('SE')">SE</button>
+    <button type="button" onclick="irParaEstado('TO')">TO</button>
+  </div>
+</div>
+
+
+     
+    <label>Código Individual:</label>
+    <div class="inline-group">
+      <input type="text" name="codigo_individual" id="codigo_individual" readonly>
+      <button type="button" onclick="gerarCodigoIndividual()">Gerar</button>
+    </div>
+     
+     
+      <label>Nome:</label>
+      <input type="text" name="nome" required>
+
+      <label>CPF:</label>
+      <input type="text" name="cpf" required>
+
+      <label>Endereço / Nº / Bairro:</label>
+      <input type="text" name="endereco" required>
+
+      <label>CEP:</label>
+      <input type="text" name="cep" required>
+
+      <label>Cidade / Sigla da Cidade:</label>
+      <input type="text" name="bairro_sigla_cidade" required>
+
+
+      <label>Mês/Ano:</label>
+      <input type="month" name="mes_ano" required>
+
+      <label>Vencimento do Documento:</label>
+      <input type="date" name="vencimento" required>
+
+      <label>Instalação Unidade Consumidora:</label>
+      <div class="inline-group">
+        <input type="text" name="unidade_consumidora" id="unidade_consumidora" readonly>
+        <button type="button" onclick="gerarUnidadeConsumidora()">Gerar</button>
+      </div>
+
+      <label>Nº do Cliente:</label>
+      <div class="inline-group">
+        <input type="text" name="numero_cliente" id="numero_cliente" readonly>
+        <button type="button" onclick="gerarNumeroCliente()">Gerar</button>
+      </div>
+
+      <label>Data Leitura Anterior:</label>
+      <input type="date" name="leitura_anterior" required>
+
+      <label>Data Leitura Atual:</label>
+      <input type="date" name="leitura_atual" required>
+
+      <label>Número de Dias:</label>
+      <input type="number" name="numero_dias" required>
+
+      <label>Data Próxima Leitura:</label>
+      <input type="date" name="proxima_leitura" required>
+
+      <label>Número abaixo da Nota Fiscal:</label>
+      <div class="inline-group">
+        <input type="text" name="numero_nota_fiscal" id="numero_nota_fiscal" readonly>
+        <button type="button" onclick="gerarNotaFiscalComplexa()">Gerar</button>
+      </div>
+
+      <label>Nota Fiscal Nº:</label>
+      <div class="inline-group">
+        <input type="text" name="nota_fiscal" id="nota_fiscal" readonly>
+        <button type="button" onclick="gerarNotaFiscal()">Gerar</button>
+      </div>
+
+      <label>Data de Emissão:</label>
+      <input type="date" name="data_emissao" required>
+
+      <label>CFOP:</label>
+      <div class="inline-group">
+        <input type="text" name="cfop" id="cfop" readonly>
+        <button type="button" onclick="gerarCFOP()">Gerar</button>
+      </div>
+
+      <label>Reservado ao Fisco:</label>
+      <div class="inline-group">
+        <input type="text" name="reservado_fisco" id="reservado_fisco" readonly>
+        <button type="button" onclick="gerarReservadoFisco()">Gerar</button>
+      </div>
+
+      <label>Cadastro de Débito Automático:</label>
+      <div class="inline-group">
+        <input type="text" name="debito_automatico" id="debito_automatico" readonly>
+        <button type="button" onclick="gerarDebitoAutomatico()">Gerar</button>
+      </div>
+
+      <label>Nº Controle:</label>
+      <div class="inline-group">
+        <input type="text" name="numero_controle" id="numero_controle" readonly>
+        <button type="button" onclick="gerarNumeroControle()">Gerar</button>
+      </div>
+
+      <label>Unid. de Entrega:</label>
+      <div class="inline-group">
+        <input type="text" name="unidade_entrega" id="unidade_entrega" readonly>
+        <button type="button" onclick="gerarUnidadeEntrega()">Gerar</button>
+      </div>
+
+      <label>Sequência:</label>
+      <div class="inline-group">
+        <input type="text" name="sequencia" id="sequencia" readonly>
+        <button type="button" onclick="gerarSequencia()">Gerar</button>
+      </div>
+
+      <label>Nº do Medidor:</label>
+      <div class="inline-group">
+        <input type="text" name="numero_medidor" id="numero_medidor" readonly>
+        <button type="button" onclick="gerarNumeroMedidor()">Gerar</button>
+      </div>
+
+      <button type="submit">Gerar Documento</button>
+    </form>
+  </div>
+
+  <script>
+    function gerarNumero(n) {
+      return Math.floor(Math.random() * Math.pow(10, n)).toString().padStart(n, '0');
+    }
+
+    function gerarUnidadeConsumidora() {
+      document.getElementById("unidade_consumidora").value = gerarNumero(9);
+    }
+
+    function gerarNumeroCliente() {
+      document.getElementById("numero_cliente").value = gerarNumero(8);
+    }
+
+    function gerarNotaFiscal() {
+      document.getElementById("nota_fiscal").value = gerarNumero(9);
+    }
+
+ function gerarNotaFiscalComplexa() {
+  const letras = ["E1A5", "5F10", "6BE8", "3B45", "233F", "119B", "4D1A", "22C6"];
+  let nota = letras.map(l => l + "." + gerarNumero(1)).join(".");
+
+  // Garante que o resultado tenha exatamente 32 caracteres
+  nota = nota.slice(0, 32).padEnd(32, "0");
+
+  document.getElementById("numero_nota_fiscal").value = nota;
+}
+
+    function gerarCFOP() {
+      document.getElementById("cfop").value = gerarNumero(4);
+    }
+
+    function gerarReservadoFisco() {
+      document.getElementById("reservado_fisco").value = "Regime Especial Proc. No 1000635-" + gerarNumero(6) + "/2005";
+    }
+
+    function gerarDebitoAutomatico() {
+      document.getElementById("debito_automatico").value = gerarNumero(12);
+    }
+
+    function gerarNumeroControle() {
+      document.getElementById("numero_controle").value = gerarNumero(11);
+    }
+
+    function gerarUnidadeEntrega() {
+      document.getElementById("unidade_entrega").value = "B" + gerarNumero(7);
+    }
+
+    function gerarSequencia() {
+      document.getElementById("sequencia").value = gerarNumero(4);
+    }
+
+    function gerarNumeroMedidor() {
+      document.getElementById("numero_medidor").value = gerarNumero(8);
+    }
+    function gerarCodigoIndividual() {
+  const codigo = Math.floor(Math.random() * 1e12).toString().padStart(12, '0');
+  document.getElementById("codigo_individual").value = codigo;
+}
+
+  function irParaEstado(sigla) {
+    window.location.href = "/estado/" + sigla;
+  }
+  </script>
+</body>
+</html>
