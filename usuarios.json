@@ -1,0 +1,98 @@
+{
+  "admin": {
+    "senha": "admin",
+    "tipo": "admin",
+    "creditos": 6320,
+    "criado_por": "System",
+    "historico_creditos": [
+      {
+        "valor": 200,
+        "data": "2025-10-21 13:28:39"
+      },
+      {
+        "valor": 100,
+        "data": "2025-10-21 14:19:20"
+      },
+      {
+        "valor": 1300,
+        "data": "2025-10-21 15:02:11"
+      },
+      {
+        "valor": 2000,
+        "data": "2025-10-22 15:34:19"
+      },
+      {
+        "valor": 2000,
+        "data": "2025-10-22 17:16:44"
+      },
+      {
+        "valor": 2000,
+        "data": "2025-10-22 18:37:01"
+      },
+      {
+        "valor": 2000,
+        "data": "2025-10-22 19:20:07"
+      },
+      {
+        "valor": 2000,
+        "data": "2025-10-23 15:56:51"
+      },
+      {
+        "valor": 8990,
+        "data": "2025-10-23 22:54:29"
+      },
+      {
+        "valor": 2000,
+        "data": "2025-10-26 23:56:31"
+      },
+      {
+        "valor": 9999,
+        "data": "2025-10-27 01:30:59"
+      },
+      {
+        "valor": 20,
+        "data": "2025-10-27 15:26:39"
+      },
+      {
+        "valor": 10,
+        "data": "2025-10-27 15:27:06"
+      },
+      {
+        "valor": 390,
+        "data": "2025-10-27 15:34:59"
+      },
+      {
+        "valor": 9000,
+        "data": "2025-10-27 19:31:00"
+      }
+    ]
+  },
+  "bigode777": {
+    "senha": "bigode777",
+    "tipo": "usuario",
+    "creditos": 200,
+    "criado_por": "admin",
+    "historico_creditos": [
+      {
+        "valor": 2000,
+        "data": "2025-10-28 21:30:16"
+      },
+      {
+        "valor": 100,
+        "data": "2025-10-28 22:46:05"
+      }
+    ]
+  },
+  "insane": {
+    "senha": "insane",
+    "tipo": "usuario",
+    "creditos": 1200,
+    "criado_por": "admin",
+    "historico_creditos": [
+      {
+        "valor": 1200,
+        "data": "2025-10-29 21:48:39"
+      }
+    ]
+  }
+}
